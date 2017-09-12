@@ -3,7 +3,7 @@ package org.tests.lib;
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
 import io.ebean.Transaction;
-import io.ebean.Platform;
+import io.ebean.annotation.Platform;
 import io.ebeaninternal.api.SpiEbeanServer;
 import junit.framework.TestCase;
 import junit.framework.TestResult;

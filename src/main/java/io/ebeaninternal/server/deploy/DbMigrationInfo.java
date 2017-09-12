@@ -1,15 +1,13 @@
 package io.ebeaninternal.server.deploy;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-import io.ebean.Platform;
+import io.ebean.annotation.Platform;
 /**
  * Class to hold the DDL-migration information that is needed to do correct alters.
- * 
+ *
  * @author Roland Praml, FOCONIS AG
  */
 public class DbMigrationInfo {
@@ -18,8 +16,8 @@ public class DbMigrationInfo {
   private final List<String> postAdd;
   private final List<String> preAlter;
   private final List<String> postAlter;
-  private final List<Platform> platforms;  
-  
+  private final List<Platform> platforms;
+
   public DbMigrationInfo(String[] preAdd, String[] postAdd, String[] preAlter, String[] postAlter, Platform[] platforms) {
     this.preAdd = toList(preAdd);
     this.postAdd = toList(postAdd);
@@ -35,7 +33,7 @@ public class DbMigrationInfo {
       return Collections.unmodifiableList(Arrays.asList(scripts));
     }
   }
-  
+
   public List<String> getPreAdd() {
     return preAdd;
   }
@@ -51,7 +49,7 @@ public class DbMigrationInfo {
   public List<Platform> getPlatforms() {
     return platforms;
   }
-  
+
   public String joinPlatforms() {
     if (platforms.isEmpty()) {
       return null;

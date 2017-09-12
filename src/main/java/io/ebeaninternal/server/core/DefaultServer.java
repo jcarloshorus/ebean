@@ -21,7 +21,6 @@ import io.ebean.SqlUpdate;
 import io.ebean.Transaction;
 import io.ebean.TransactionCallback;
 import io.ebean.TxCallable;
-import io.ebean.TxRunnable;
 import io.ebean.TxScope;
 import io.ebean.Update;
 import io.ebean.UpdateQuery;
@@ -90,8 +89,8 @@ import io.ebeaninternal.server.transaction.TransactionScopeManager;
 import io.ebeaninternal.util.ParamTypeHelper;
 import io.ebeaninternal.util.ParamTypeHelper.TypeInfo;
 import io.ebeanservice.docstore.api.DocStoreIntegration;
-import io.ebean.TxIsolation;
-import io.ebean.TxType;
+import io.ebean.annotation.TxIsolation;
+import io.ebean.annotation.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

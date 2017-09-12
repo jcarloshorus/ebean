@@ -2,9 +2,9 @@ package org.tests.model.basic.xtra;
 
 import io.ebean.Ebean;
 import io.ebean.Transaction;
-import io.ebean.TxType;
+import io.ebean.annotation.TxType;
 import io.ebean.annotation.Transactional;
-import io.ebean.PersistBatch;
+import io.ebean.annotation.PersistBatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ public class DummyDao {
 
   Logger logger = LoggerFactory.getLogger(DummyDao.class);
 
-  @Transactional(type = TxType.REQUIRES_NEW)
+  @Transactional(type = TxType.REQUIRES_NEW, ver = 2)
   public void doSomething() {
 
     logger.info("  --- in DummyDao.doSomething() with TxType.REQUIRES_NEW");
