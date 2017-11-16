@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "", propOrder = {
   "value"
 })
-@XmlRootElement(name = "rollback")
+@XmlRootElement(name = "rollback", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class Rollback {
 
   @XmlValue

@@ -1,14 +1,13 @@
 package io.ebeaninternal.dbmigration.migration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,6 +19,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="before" type="{http://ebean-orm.github.io/xml/ns/dbmigration}ddlScript" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="after" type="{http://ebean-orm.github.io/xml/ns/dbmigration}ddlScript" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
  *       &lt;attribute name="columnName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tableName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="withHistory" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -49,16 +52,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "before", "after"
+  "before",
+  "after"
 })
-@XmlRootElement(name = "alterColumn")
+@XmlRootElement(name = "alterColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class AlterColumn {
 
-  @XmlElement(required = false)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
   protected List<DdlScript> before;
-  @XmlElement(required = false)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
   protected List<DdlScript> after;
-
   @XmlAttribute(name = "columnName", required = true)
   protected String columnName;
   @XmlAttribute(name = "tableName", required = true)
@@ -103,6 +106,60 @@ public class AlterColumn {
   protected String dropForeignKey;
   @XmlAttribute(name = "dropForeignKeyIndex")
   protected String dropForeignKeyIndex;
+
+  /**
+   * Gets the value of the before property.
+   * <p>
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the before property.
+   * <p>
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getBefore().add(newItem);
+   * </pre>
+   * <p>
+   * <p>
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link DdlScript }
+   */
+  public List<DdlScript> getBefore() {
+    if (before == null) {
+      before = new ArrayList<>();
+    }
+    return this.before;
+  }
+
+  /**
+   * Gets the value of the after property.
+   * <p>
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the after property.
+   * <p>
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getAfter().add(newItem);
+   * </pre>
+   * <p>
+   * <p>
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link DdlScript }
+   */
+  public List<DdlScript> getAfter() {
+    if (after == null) {
+      after = new ArrayList<>();
+    }
+    return this.after;
+  }
 
   /**
    * Gets the value of the columnName property.
@@ -544,17 +601,4 @@ public class AlterColumn {
     this.dropForeignKeyIndex = value;
   }
 
-  public List<DdlScript> getBefore() {
-    if (before == null) {
-      before = new ArrayList<>();
-    }
-    return before;
-  }
-
-  public List<DdlScript> getAfter() {
-    if (after == null) {
-      after = new ArrayList<>();
-    }
-    return after;
-  }
 }

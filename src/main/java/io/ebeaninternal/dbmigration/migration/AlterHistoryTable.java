@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "alterHistoryTable")
+@XmlRootElement(name = "alterHistoryTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class AlterHistoryTable {
 
   @XmlAttribute(name = "baseTable", required = true)

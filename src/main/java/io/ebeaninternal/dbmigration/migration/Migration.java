@@ -30,10 +30,10 @@ import java.util.List;
 @XmlType(name = "", propOrder = {
   "changeSet"
 })
-@XmlRootElement(name = "migration")
+@XmlRootElement(name = "migration", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class Migration {
 
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected List<ChangeSet> changeSet;
 
   /**

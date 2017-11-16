@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 /**
  * This object contains factory methods for each
  * Java content interface and Java element interface
- * generated in the io.ebean.dbmigration.migration package.
+ * generated in the io.ebeaninternal.dbmigration.migration package.
  * <p>An ObjectFactory allows you to programatically
  * construct new instances of the Java representation
  * for XML content. The Java representation of XML
@@ -21,7 +21,7 @@ public class ObjectFactory {
 
 
   /**
-   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: io.ebean.dbmigration.migration
+   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: io.ebeaninternal.dbmigration.migration
    */
   public ObjectFactory() {
   }
@@ -45,6 +45,13 @@ public class ObjectFactory {
    */
   public Column createColumn() {
     return new Column();
+  }
+
+  /**
+   * Create an instance of {@link DdlScript }
+   */
+  public DdlScript createDdlScript() {
+    return new DdlScript();
   }
 
   /**
@@ -125,6 +132,13 @@ public class ObjectFactory {
   }
 
   /**
+   * Create an instance of {@link Ddl }
+   */
+  public Ddl createDdl() {
+    return new Ddl();
+  }
+
+  /**
    * Create an instance of {@link CreateIndex }
    */
   public CreateIndex createCreateIndex() {
@@ -186,13 +200,5 @@ public class ObjectFactory {
   public Migration createMigration() {
     return new Migration();
   }
-
-  /**
-   * Create an instance of {@link DdlScript }
-   */
-  public DdlScript createDdlScript() {
-    return new DdlScript();
-  }
-
 
 }

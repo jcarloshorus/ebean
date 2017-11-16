@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
   "defaultTablespace"
 })
-@XmlRootElement(name = "configuration")
+@XmlRootElement(name = "configuration", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class Configuration {
 
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected DefaultTablespace defaultTablespace;
 
   /**

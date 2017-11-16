@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "renameColumn")
+@XmlRootElement(name = "renameColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class RenameColumn {
 
   @XmlAttribute(name = "oldName", required = true)

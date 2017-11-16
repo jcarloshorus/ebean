@@ -16,6 +16,7 @@ import io.ebeaninternal.dbmigration.migration.AlterColumn;
 import io.ebeaninternal.dbmigration.migration.Column;
 import io.ebeaninternal.dbmigration.migration.CreateIndex;
 import io.ebeaninternal.dbmigration.migration.CreateTable;
+import io.ebeaninternal.dbmigration.migration.Ddl;
 import io.ebeaninternal.dbmigration.migration.DdlScript;
 import io.ebeaninternal.dbmigration.migration.DropColumn;
 import io.ebeaninternal.dbmigration.migration.DropHistoryTable;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Base implementation for 'create table' and 'alter table' statements.
@@ -103,7 +105,6 @@ public class BaseTableDdl implements TableDdl {
 
       before = getScriptsForPlatform(column.getBefore(), platformDdl.getPlatform().getName());
       after = getScriptsForPlatform(column.getAfter(), platformDdl.getPlatform().getName());
-
     }
 
     /**
@@ -128,7 +129,6 @@ public class BaseTableDdl implements TableDdl {
       }
 
       after = getScriptsForPlatform(alter.getAfter(), platformDdl.getPlatform().getName());
-
     }
 
     public void writeBefore(DdlBuffer buffer) throws IOException {
@@ -142,7 +142,7 @@ public class BaseTableDdl implements TableDdl {
     }
 
     public void writeAfter(DdlBuffer buffer) throws IOException {
-      // here we run postmigration scripts
+      // here we run post-migration scripts
       for (String ddlScript : after) {
         buffer.append(translate(ddlScript, tableName, columnName, defaultValue));
         buffer.endOfStatement();
@@ -156,14 +156,18 @@ public class BaseTableDdl implements TableDdl {
       List<String> ret = Collections.emptyList();
       for (DdlScript script : scripts) {
         if (script.getPlatforms() == null || script.getPlatforms().isEmpty()) {
-          ret = script.getDdl();
+          ret = content(script.getDdl());
         } else for (String platform : StringHelper.splitNames(script.getPlatforms())) {
           if (platform.equals(searchPlatform)) {
-           return script.getDdl();
+           return content(script.getDdl());
           }
         }
       }
       return ret;
+    }
+
+    private List<String> content(List<Ddl> ddl) {
+      return ddl.stream().map(Ddl::getContent).collect(Collectors.toList());
     }
 
     /**
@@ -472,7 +476,7 @@ public class BaseTableDdl implements TableDdl {
 
     if (indexName != null) {
       // no matching unique constraint so add the index
-      fkeyBuffer.append(platformDdl.createIndex(indexName, tableName, columns)).endOfStatement();
+      fkeyBuffer.append(platformDdl.createIndex(false, indexName, tableName, columns)).endOfStatement();
     }
 
     fkeyBuffer.end();
@@ -668,7 +672,7 @@ public class BaseTableDdl implements TableDdl {
 
     String[] cols = toColumnNamesSplit(createIndex.getColumns());
     writer.apply()
-      .append(platformDdl.createIndex(createIndex.getIndexName(), createIndex.getTableName(), cols))
+      .append(platformDdl.createIndex(createIndex.isUnique(), createIndex.getIndexName(), createIndex.getTableName(), cols))
       .endOfStatement();
 
     writer.dropAll()

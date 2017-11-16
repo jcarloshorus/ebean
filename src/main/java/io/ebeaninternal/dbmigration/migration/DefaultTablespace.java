@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "defaultTablespace")
+@XmlRootElement(name = "defaultTablespace", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class DefaultTablespace {
 
   @XmlAttribute(name = "tables")

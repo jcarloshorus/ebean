@@ -6,6 +6,7 @@ import io.ebeaninternal.dbmigration.migration.AddHistoryTable;
 import io.ebeaninternal.dbmigration.migration.AddTableComment;
 import io.ebeaninternal.dbmigration.migration.AlterColumn;
 import io.ebeaninternal.dbmigration.migration.Column;
+import io.ebeaninternal.dbmigration.migration.CreateIndex;
 import io.ebeaninternal.dbmigration.migration.CreateTable;
 import io.ebeaninternal.dbmigration.migration.DropColumn;
 import io.ebeaninternal.dbmigration.migration.DropHistoryTable;
@@ -18,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,6 +168,11 @@ public class MTable {
     for (Column column : cols) {
       addColumn(column);
     }
+    List<UniqueConstraint> uqConstraints = createTable.getUniqueConstraint();
+    for (UniqueConstraint constraint : uqConstraints) {
+      uniqueConstraints.add(new MCompoundUniqueConstraint(constraint));
+    }
+
   }
 
 
@@ -314,6 +322,47 @@ public class MTable {
       }
       modelDiff.addTableComment(addTableComment);
     }
+
+    compareUniqueConstraints(modelDiff, newTable);
+  }
+
+  private void compareUniqueConstraints(ModelDiff modelDiff, MTable newTable) {
+
+    Map<String, MCompoundUniqueConstraint> newMap = uniqueConstraintMap(newTable.getUniqueConstraints());
+    Map<String, MCompoundUniqueConstraint> currentMap = uniqueConstraintMap(getUniqueConstraints());
+
+    if (newMap.isEmpty() && currentMap.isEmpty()) {
+      return;
+    }
+
+    for (MCompoundUniqueConstraint existing : currentMap.values()) {
+      MCompoundUniqueConstraint newOne = newMap.get(existing.getName());
+      if (newOne == null || existing.isDiff(newOne)) {
+        modelDiff.addDropIndex(existing.dropIndex(name));
+      }
+    }
+
+    for (MCompoundUniqueConstraint newOne : newMap.values()) {
+      MCompoundUniqueConstraint existing = currentMap.get(newOne.getName());
+      if (existing == null || existing.isDiff(newOne)) {
+        modelDiff.addCreateIndex(newOne.createIndex(name));
+      }
+    }
+
+  }
+
+  private Map<String,MCompoundUniqueConstraint> uniqueConstraintMap(List<MCompoundUniqueConstraint> constraints) {
+
+    if (constraints.isEmpty()) {
+      return Collections.emptyMap();
+    }
+
+    Map<String,MCompoundUniqueConstraint> map = new LinkedHashMap<>();
+    for (MCompoundUniqueConstraint constraint : constraints) {
+      map.put(constraint.getName(), constraint);
+    }
+
+    return map;
   }
 
   /**
@@ -512,6 +561,10 @@ public class MTable {
     addUniqueConstraint(cols, oneToOne, constraintName);
   }
 
+  void addUniqueConstraint(CreateIndex createIndex) {
+    uniqueConstraints.add(new MCompoundUniqueConstraint(createIndex));
+  }
+
   /**
    * Add a compound foreign key.
    */
@@ -657,4 +710,15 @@ public class MTable {
     return draftTableName + "." + references.substring(lastDot + 1);
   }
 
+  boolean removeUniqueConstraint(String name) {
+    Iterator<MCompoundUniqueConstraint> it = uniqueConstraints.iterator();
+    while (it.hasNext()) {
+      MCompoundUniqueConstraint constraint = it.next();
+      if (constraint.getName().equals(name)) {
+        it.remove();
+        return true;
+      }
+    }
+    return false;
+  }
 }

@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;/simpleType>
  * </pre>
  */
-@XmlType(name = "identityType")
+@XmlType(name = "identityType", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 @XmlEnum
 public enum IdentityType {
 

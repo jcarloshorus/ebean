@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "addTableComment")
+@XmlRootElement(name = "addTableComment", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class AddTableComment {
 
   @XmlAttribute(name = "name", required = true)

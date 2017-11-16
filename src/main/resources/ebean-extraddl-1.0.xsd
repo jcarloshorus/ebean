@@ -7,7 +7,7 @@
   <xsd:element name="extra-ddl">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="ddl-script" minOccurs="1" maxOccurs="unbounded"/>
+        <xsd:element ref="ddl-script" maxOccurs="unbounded"/>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>

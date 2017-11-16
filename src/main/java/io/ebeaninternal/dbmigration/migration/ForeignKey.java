@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "foreignKey")
+@XmlRootElement(name = "foreignKey", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class ForeignKey {
 
   @XmlAttribute(name = "name", required = true)

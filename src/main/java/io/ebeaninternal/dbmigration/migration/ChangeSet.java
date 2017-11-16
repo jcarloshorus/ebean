@@ -40,24 +40,24 @@ import java.util.List;
 @XmlType(name = "", propOrder = {
   "changeSetChildren"
 })
-@XmlRootElement(name = "changeSet")
+@XmlRootElement(name = "changeSet", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class ChangeSet {
 
   @XmlElements({
-    @XmlElement(name = "configuration", type = Configuration.class),
-    @XmlElement(name = "sql", type = Sql.class),
-    @XmlElement(name = "createTable", type = CreateTable.class),
-    @XmlElement(name = "dropTable", type = DropTable.class),
-    @XmlElement(name = "renameTable", type = RenameTable.class),
-    @XmlElement(name = "addTableComment", type = AddTableComment.class),
-    @XmlElement(name = "addHistoryTable", type = AddHistoryTable.class),
-    @XmlElement(name = "dropHistoryTable", type = DropHistoryTable.class),
-    @XmlElement(name = "addColumn", type = AddColumn.class),
-    @XmlElement(name = "dropColumn", type = DropColumn.class),
-    @XmlElement(name = "alterColumn", type = AlterColumn.class),
-    @XmlElement(name = "renameColumn", type = RenameColumn.class),
-    @XmlElement(name = "createIndex", type = CreateIndex.class),
-    @XmlElement(name = "dropIndex", type = DropIndex.class)
+    @XmlElement(name = "configuration", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = Configuration.class),
+    @XmlElement(name = "sql", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = Sql.class),
+    @XmlElement(name = "createTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = CreateTable.class),
+    @XmlElement(name = "dropTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropTable.class),
+    @XmlElement(name = "renameTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = RenameTable.class),
+    @XmlElement(name = "addTableComment", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = AddTableComment.class),
+    @XmlElement(name = "addHistoryTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = AddHistoryTable.class),
+    @XmlElement(name = "dropHistoryTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropHistoryTable.class),
+    @XmlElement(name = "addColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = AddColumn.class),
+    @XmlElement(name = "dropColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropColumn.class),
+    @XmlElement(name = "alterColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = AlterColumn.class),
+    @XmlElement(name = "renameColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = RenameColumn.class),
+    @XmlElement(name = "createIndex", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = CreateIndex.class),
+    @XmlElement(name = "dropIndex", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropIndex.class)
   })
   protected List<Object> changeSetChildren;
   @XmlAttribute(name = "type", required = true)

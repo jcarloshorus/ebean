@@ -33,10 +33,10 @@ import java.util.List;
 @XmlType(name = "", propOrder = {
   "column"
 })
-@XmlRootElement(name = "addColumn")
+@XmlRootElement(name = "addColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class AddColumn {
 
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected List<Column> column;
   @XmlAttribute(name = "tableName", required = true)
   protected String tableName;

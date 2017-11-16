@@ -1,10 +1,13 @@
 package io.ebeaninternal.server.deploy;
 
+import io.ebean.annotation.Platform;
+import io.ebeaninternal.dbmigration.migration.Ddl;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import io.ebean.annotation.Platform;
 /**
  * Class to hold the DDL-migration information that is needed to do correct alters.
  *
@@ -12,18 +15,32 @@ import io.ebean.annotation.Platform;
  */
 public class DbMigrationInfo {
 
-  private final List<String> preAdd;
-  private final List<String> postAdd;
-  private final List<String> preAlter;
-  private final List<String> postAlter;
+  private final List<Ddl> preAdd;
+  private final List<Ddl> postAdd;
+  private final List<Ddl> preAlter;
+  private final List<Ddl> postAlter;
   private final List<Platform> platforms;
 
   public DbMigrationInfo(String[] preAdd, String[] postAdd, String[] preAlter, String[] postAlter, Platform[] platforms) {
-    this.preAdd = toList(preAdd);
-    this.postAdd = toList(postAdd);
-    this.preAlter = toList(preAlter);
-    this.postAlter = toList(postAlter);
+    this.preAdd = toDdl(preAdd);
+    this.postAdd = toDdl(postAdd);
+    this.preAlter = toDdl(preAlter);
+    this.postAlter = toDdl(postAlter);
     this.platforms = toList(platforms);
+  }
+
+  private List<Ddl> toDdl(String[] scripts) {
+    if (scripts.length == 0) {
+      return Collections.emptyList();
+    } else {
+      List<Ddl> ddl = new ArrayList<>(scripts.length);
+      for (String script : scripts) {
+        Ddl e = new Ddl();
+        e.setContent(script);
+        ddl.add(e);
+      }
+      return ddl;
+    }
   }
 
   private <T> List<T> toList(T[] scripts) {
@@ -34,18 +51,22 @@ public class DbMigrationInfo {
     }
   }
 
-  public List<String> getPreAdd() {
+  public List<Ddl> getPreAdd() {
     return preAdd;
   }
-  public List<String> getPostAdd() {
+
+  public List<Ddl> getPostAdd() {
     return postAdd;
   }
-  public List<String> getPreAlter() {
+
+  public List<Ddl> getPreAlter() {
     return preAlter;
   }
-  public List<String> getPostAlter() {
+
+  public List<Ddl> getPostAlter() {
     return postAlter;
   }
+
   public List<Platform> getPlatforms() {
     return platforms;
   }

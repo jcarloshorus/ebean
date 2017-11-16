@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;/simpleType>
  * </pre>
  */
-@XmlType(name = "changeSetType")
+@XmlType(name = "changeSetType", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 @XmlEnum
 public enum ChangeSetType {
 

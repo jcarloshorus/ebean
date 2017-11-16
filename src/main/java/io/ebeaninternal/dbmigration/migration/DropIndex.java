@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "dropIndex")
+@XmlRootElement(name = "dropIndex", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class DropIndex {
 
   @XmlAttribute(name = "indexName", required = true)

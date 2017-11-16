@@ -3,8 +3,10 @@ package io.ebeaninternal.dbmigration.model;
 import io.ebeaninternal.dbmigration.migration.AddColumn;
 import io.ebeaninternal.dbmigration.migration.AddHistoryTable;
 import io.ebeaninternal.dbmigration.migration.AlterColumn;
+import io.ebeaninternal.dbmigration.migration.CreateIndex;
 import io.ebeaninternal.dbmigration.migration.DropColumn;
 import io.ebeaninternal.dbmigration.migration.DropHistoryTable;
+import io.ebeaninternal.dbmigration.migration.DropIndex;
 import io.ebeaninternal.dbmigration.migration.DropTable;
 import org.junit.Test;
 
@@ -32,7 +34,7 @@ public class MTableTest {
     return table;
   }
 
-  static MTable newTableAdd2Columns() {
+  private static MTable newTableAdd2Columns() {
     MTable table = new MTable("tab");
     table.addColumn(new MColumn("id", "bigint"));
     table.addColumn(new MColumn("name", "varchar(20)"));
@@ -42,7 +44,7 @@ public class MTableTest {
     return table;
   }
 
-  static MTable newTableModifiedColumn() {
+  private  static MTable newTableModifiedColumn() {
     MColumn modCol = new MColumn("name", "varchar(30)");// modified type
     modCol.setNotnull(true);
 
@@ -224,4 +226,98 @@ public class MTableTest {
     assertThat(diff.getDropChanges().get(0)).isInstanceOf(DropHistoryTable.class);
   }
 
+  @Test
+  public void test_compare_addCompoundUnique() throws Exception {
+
+    MTable base = base();
+    MTable newTable = base();
+    newTable.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(1);
+    assertThat(diff.getApplyChanges().get(0)).isInstanceOfAny(CreateIndex.class);
+    assertThat(diff.getDropChanges()).hasSize(0);
+  }
+
+  @Test
+  public void test_compare_dropCompoundUnique() throws Exception {
+
+    MTable base = base();
+    base.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+    MTable newTable = base();
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(1);
+    assertThat(diff.getApplyChanges().get(0)).isInstanceOfAny(DropIndex.class);
+    assertThat(diff.getDropChanges()).hasSize(0);
+  }
+
+  @Test
+  public void test_compare_addDropCompoundUnique() throws Exception {
+
+    MTable base = base();
+    base.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+    MTable newTable = base();
+    newTable.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_bar");
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(2);
+    assertThat(diff.getApplyChanges().get(0)).isInstanceOfAny(DropIndex.class);
+    assertThat(diff.getApplyChanges().get(1)).isInstanceOfAny(CreateIndex.class);
+    assertThat(diff.getDropChanges()).hasSize(0);
+  }
+
+  @Test
+  public void test_compare_addDropCompoundUnique_whenColsDiff() throws Exception {
+
+    MTable base = base();
+    base.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+    MTable newTable = base();
+    newTable.addUniqueConstraint(new String[]{"a", "b", "c"}, false, "uq_foo");
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(2);
+    assertThat(diff.getApplyChanges().get(0)).isInstanceOfAny(DropIndex.class);
+    assertThat(diff.getApplyChanges().get(1)).isInstanceOfAny(CreateIndex.class);
+    assertThat(diff.getDropChanges()).hasSize(0);
+  }
+
+  @Test
+  public void test_compare_addDropCompoundUnique_whenColOrderDiff() throws Exception {
+
+    MTable base = base();
+    base.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+    MTable newTable = base();
+    newTable.addUniqueConstraint(new String[]{"b", "a"}, false, "uq_foo");
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(2);
+    assertThat(diff.getApplyChanges().get(0)).isInstanceOfAny(DropIndex.class);
+    assertThat(diff.getApplyChanges().get(1)).isInstanceOfAny(CreateIndex.class);
+    assertThat(diff.getDropChanges()).hasSize(0);
+  }
+
+  @Test
+  public void test_compare_noDiff_whenColsSame() throws Exception {
+
+    MTable base = base();
+    base.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+    MTable newTable = base();
+    newTable.addUniqueConstraint(new String[]{"a", "b"}, false, "uq_foo");
+
+    ModelDiff diff = new ModelDiff();
+    base.compare(diff, newTable);
+
+    assertThat(diff.getApplyChanges()).hasSize(0);
+  }
 }

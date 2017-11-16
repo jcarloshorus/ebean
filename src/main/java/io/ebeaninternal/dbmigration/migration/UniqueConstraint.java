@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "uniqueConstraint")
+@XmlRootElement(name = "uniqueConstraint", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class UniqueConstraint {
 
   @XmlAttribute(name = "name", required = true)

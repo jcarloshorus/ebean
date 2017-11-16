@@ -16,6 +16,8 @@ public class MIndex {
 
   private String indexName;
 
+  private boolean unique;
+
   private List<String> columns = new ArrayList<>();
 
   /**
@@ -39,6 +41,7 @@ public class MIndex {
   public MIndex(CreateIndex createIndex) {
     this.indexName = createIndex.getIndexName();
     this.tableName = createIndex.getTableName();
+    this.unique = Boolean.TRUE == createIndex.isUnique();
     this.columns = split(createIndex.getColumns());
   }
 
@@ -71,6 +74,9 @@ public class MIndex {
     create.setIndexName(indexName);
     create.setTableName(tableName);
     create.setColumns(join());
+    if (unique) {
+      create.setUnique(Boolean.TRUE);
+    }
     return create;
   }
 
@@ -99,8 +105,14 @@ public class MIndex {
   /**
    * Return true if the index has changed.
    */
-  private boolean changed(MIndex newIndex) {
+  boolean changed(MIndex newIndex) {
+    if (!indexName.equals(newIndex.getIndexName())) {
+      return true;
+    }
     if (!tableName.equals(newIndex.getTableName())) {
+      return true;
+    }
+    if (unique != newIndex.unique){
       return true;
     }
     List<String> newColumns = newIndex.getColumns();

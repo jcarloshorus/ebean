@@ -94,6 +94,8 @@ public class PlatformDdl {
 
   protected String updateNullWithDefault = "update ${table} set ${column} = ${default} where ${column} is null";
 
+  protected String unique = "unique";
+
   /**
    * Set false for MsSqlServer to allow multiple nulls for OneToOne mapping.
    */
@@ -339,12 +341,15 @@ public class PlatformDdl {
   /**
    * Return the create index statement.
    */
-  public String createIndex(String indexName, String tableName, String[] columns) {
+  public String createIndex(Boolean unique, String indexName, String tableName, String[] columns) {
 
     StringBuilder buffer = new StringBuilder();
-    buffer.append("create index ").append(indexName).append(" on ").append(tableName);
+    buffer.append("create ");
+    if (Boolean.TRUE.equals(unique)) {
+      buffer.append(unique).append(" ");
+    }
+    buffer.append("index ").append(indexName).append(" on ").append(tableName);
     appendColumns(columns, buffer);
-
     return buffer.toString();
   }
 

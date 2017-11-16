@@ -142,6 +142,8 @@
   <xsd:element name="dropTable">
     <xsd:complexType>
       <xsd:attribute name="name" type="xsd:string" use="required"/>
+      <xsd:attribute name="sequenceCol" type="xsd:string"/>
+      <xsd:attribute name="sequenceName" type="xsd:string"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -201,6 +203,10 @@
 
   <xsd:element name="alterColumn">
     <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="before" type="ddlScript" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="after" type="ddlScript" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
       <xsd:attribute name="columnName" type="xsd:string" use="required"/>
       <xsd:attribute name="tableName" type="xsd:string" use="required"/>
       <xsd:attribute name="withHistory" type="xsd:boolean"/>
@@ -235,6 +241,18 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="ddl">
+    <xsd:complexType mixed="true">
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="ddlScript">
+    <xsd:sequence>
+      <xsd:element ref="ddl" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="platforms" type="xsd:string"/>
+  </xsd:complexType>
+
   <!-- INDEXES (Non unique) -->
 
   <xsd:element name="createIndex">
@@ -242,6 +260,7 @@
       <xsd:attribute name="indexName" type="xsd:string" use="required"/>
       <xsd:attribute name="tableName" type="xsd:string" use="required"/>
       <xsd:attribute name="columns" type="xsd:string" use="required"/>
+      <xsd:attribute name="unique" type="xsd:boolean"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -256,7 +275,11 @@
   <!-- ============================================ -->
 
   <xsd:element name="column">
-    <xsd:complexType mixed="true">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="before" type="ddlScript" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="after" type="ddlScript" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
       <xsd:attribute name="name" type="xsd:string" use="required"/>
       <xsd:attribute name="type" type="xsd:string" use="required"/>
       <xsd:attribute name="defaultValue" type="xsd:string"/>

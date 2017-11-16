@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="indexName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tableName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="columns" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="unique" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "createIndex")
+@XmlRootElement(name = "createIndex", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class CreateIndex {
 
   @XmlAttribute(name = "indexName", required = true)
@@ -35,6 +36,8 @@ public class CreateIndex {
   protected String tableName;
   @XmlAttribute(name = "columns", required = true)
   protected String columns;
+  @XmlAttribute(name = "unique")
+  protected Boolean unique;
 
   /**
    * Gets the value of the indexName property.
@@ -94,6 +97,26 @@ public class CreateIndex {
    */
   public void setColumns(String value) {
     this.columns = value;
+  }
+
+  /**
+   * Gets the value of the unique property.
+   *
+   * @return possible object is
+   * {@link Boolean }
+   */
+  public Boolean isUnique() {
+    return unique;
+  }
+
+  /**
+   * Sets the value of the unique property.
+   *
+   * @param value allowed object is
+   *              {@link Boolean }
+   */
+  public void setUnique(Boolean value) {
+    this.unique = value;
   }
 
 }

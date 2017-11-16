@@ -202,15 +202,27 @@ public class ModelContainer {
   }
 
   /**
-   * Apply a CreateTable change to the model.
+   * Apply a CreateIndex change to the model.
    */
   protected void applyChange(CreateIndex createIndex) {
+
     String indexName = createIndex.getIndexName();
     if (indexes.containsKey(indexName)) {
       throw new IllegalStateException("Index [" + indexName + "] already exists in model?");
     }
-    MIndex index = new MIndex(createIndex);
-    indexes.put(createIndex.getIndexName(), index);
+
+    if (Boolean.TRUE == createIndex.isUnique()) {
+      String tableName = createIndex.getTableName();
+      MTable table = getTable(tableName);
+      if (table == null) {
+        throw new IllegalStateException("Table [" + tableName + "] not found for unique index [" + indexName + "] already exists in model?");
+      }
+      table.addUniqueConstraint(createIndex);
+
+    } else {
+      MIndex index = new MIndex(createIndex);
+      indexes.put(createIndex.getIndexName(), index);
+    }
   }
 
   /**
@@ -218,10 +230,15 @@ public class ModelContainer {
    */
   protected void applyChange(DropIndex dropIndex) {
     String name = dropIndex.getIndexName();
-    if (!indexes.containsKey(name)) {
-      throw new IllegalStateException("Index [" + name + "] does not exist in model?");
+    MIndex old = indexes.remove(name);
+    if (old == null && !removeUniqueConstraint(dropIndex)) {
+      throw new IllegalStateException("Index [" + name + "] does not exist in model? (table " + dropIndex.getTableName() + ")");
     }
-    indexes.remove(name);
+  }
+
+  private boolean removeUniqueConstraint(DropIndex dropIndex) {
+    MTable table = getTable(dropIndex.getTableName());
+    return table != null && table.removeUniqueConstraint(dropIndex.getIndexName());
   }
 
 

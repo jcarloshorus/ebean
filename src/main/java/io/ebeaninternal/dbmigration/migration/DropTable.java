@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="sequenceCol" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="sequenceName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -24,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "dropTable")
+@XmlRootElement(name = "dropTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class DropTable {
 
   @XmlAttribute(name = "name", required = true)
@@ -65,16 +67,6 @@ public class DropTable {
   }
 
   /**
-   * Gets the value of the sequenceName property.
-   *
-   * @return possible object is
-   * {@link String }
-   */
-  public String getSequenceName() {
-    return sequenceName;
-  }
-
-  /**
    * Sets the value of the sequenceCol property.
    *
    * @param value allowed object is
@@ -82,6 +74,16 @@ public class DropTable {
    */
   public void setSequenceCol(String value) {
     this.sequenceCol = value;
+  }
+
+  /**
+   * Gets the value of the sequenceName property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public String getSequenceName() {
+    return sequenceName;
   }
 
   /**

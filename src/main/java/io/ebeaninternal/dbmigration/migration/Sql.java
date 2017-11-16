@@ -30,12 +30,12 @@ import javax.xml.bind.annotation.XmlType;
   "apply",
   "rollback"
 })
-@XmlRootElement(name = "sql")
+@XmlRootElement(name = "sql", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class Sql {
 
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected Apply apply;
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected Rollback rollback;
 
   /**

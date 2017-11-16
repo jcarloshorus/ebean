@@ -46,12 +46,14 @@ import java.util.List;
   "uniqueConstraint",
   "foreignKey"
 })
-@XmlRootElement(name = "createTable")
+@XmlRootElement(name = "createTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
 public class CreateTable {
 
-  @XmlElement(required = true)
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
   protected List<Column> column;
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
   protected List<UniqueConstraint> uniqueConstraint;
+  @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
   protected List<ForeignKey> foreignKey;
   @XmlAttribute(name = "name", required = true)
   protected String name;
