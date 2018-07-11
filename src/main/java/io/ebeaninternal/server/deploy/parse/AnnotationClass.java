@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.util.Set;
+import javax.persistence.InheritanceType;
 
 /**
  * Read the class level deployment annotations.
@@ -90,7 +91,7 @@ public class AnnotationClass extends AnnotationParser {
     if (descriptor.isBaseTableType()) {
       Class<?> beanType = descriptor.getBeanType();
       InheritInfo inheritInfo = descriptor.getInheritInfo();
-      if (inheritInfo != null) {
+      if (inheritInfo != null && inheritInfo.getInheritanceType() == InheritanceType.SINGLE_TABLE) {
         beanType = inheritInfo.getRoot().getType();
       }
       // default the TableName using NamingConvention.

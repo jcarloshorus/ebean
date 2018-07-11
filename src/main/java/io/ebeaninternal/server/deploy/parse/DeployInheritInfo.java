@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorType;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.InheritanceType;
 
 /**
  * Represents a node in the Inheritance tree.
@@ -21,6 +22,7 @@ public class DeployInheritInfo {
 
   private String discriminatorStringValue;
   private Object discriminatorObjectValue;
+  private InheritanceType inheritanceType;
 
   private int columnType;
   private String columnName;
@@ -250,5 +252,19 @@ public class DeployInheritInfo {
   public String toString() {
     return "InheritInfo[" + type.getName() + "]" + " root[" + parent.getName() + "]" + " disValue[" + discriminatorStringValue + "]";
   }
+
+    /**
+     * @return the inheritanceType
+     */
+    public InheritanceType getInheritanceType() {
+        return inheritanceType;
+    }
+
+    /**
+     * @param inheritanceType the inheritanceType to set
+     */
+    public void setInheritanceType(InheritanceType inheritanceType) {
+        this.inheritanceType = inheritanceType;
+    }
 
 }

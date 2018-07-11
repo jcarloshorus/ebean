@@ -141,7 +141,10 @@ public class DeployBeanProperty {
    * The type that owns this property.
    */
   private Class<?> owningType;
-
+  private DeployTableJoin inheritanceTableJoin;
+  private String inheritanceTableJoinPrefix;
+  private String inheritanceTable;
+  
   /**
    * True if the property is a Clob, Blob LongVarchar or LongVarbinary.
    */
@@ -476,6 +479,10 @@ public class DeployBeanProperty {
    */
   public boolean isLocal() {
     return owningType == null || owningType.equals(desc.getBeanType());
+  }
+  
+  public boolean isInherited(){
+      return !isLocal();
   }
 
   /**
@@ -827,6 +834,10 @@ public class DeployBeanProperty {
     return secondaryTableJoin;
   }
 
+  public void setInheritanceTableJoin(DeployTableJoin inheritanceTableJoin, String prefix){
+      this.inheritanceTableJoin = inheritanceTableJoin;
+      this.inheritanceTableJoinPrefix = prefix;
+  }
   public void setSecondaryTableJoin(DeployTableJoin secondaryTableJoin, String prefix) {
     this.secondaryTableJoin = secondaryTableJoin;
     this.secondaryTableJoinPrefix = prefix;
@@ -1124,4 +1135,33 @@ public class DeployBeanProperty {
   public void setElementProperty() {
     this.elementProperty = true;
   }
+
+    /**
+     * @return the inheritanceTableJoin
+     */
+    public DeployTableJoin getInheritanceTableJoin() {
+        return inheritanceTableJoin;
+    }
+
+    /**
+     * @return the inheritanceTableJoinPrefix
+     */
+    public String getInheritanceTableJoinPrefix() {
+        return inheritanceTableJoinPrefix;
+    }
+
+    /**
+     * @return the inheritanceTable
+     */
+    public String getInheritanceTable() {
+        return inheritanceTable;
+    }
+
+    /**
+     * @param inheritanceTable the inheritanceTable to set
+     */
+    public void setInheritanceTable(String inheritanceTable) {
+        this.inheritanceTable = inheritanceTable;
+    }
+
 }

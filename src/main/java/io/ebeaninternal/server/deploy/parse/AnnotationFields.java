@@ -73,6 +73,7 @@ import javax.validation.constraints.Size;
 import java.sql.Types;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.Table;
 
 /**
  * Read the field level deployment annotations.
@@ -132,6 +133,10 @@ public class AnnotationFields extends AnnotationParser {
       prop.setId();
       prop.setNullable(false);
       prop.setEmbedded();
+    }
+    
+    if(prop.isInherited()){
+        prop.setInheritanceTable(descriptor.getBaseTable());
     }
 
     DocEmbedded docEmbedded = get(prop, DocEmbedded.class);
