@@ -78,8 +78,8 @@ class SqlTreeNodeBean implements SqlTreeNode {
     String baseTableAlias;
 
     /**
-     * Table alias set if this bean node includes a join to a intersection table
-     * and that table has history support.
+   * Table alias set if this bean node includes a join to a intersection
+   * table and that table has history support.
      */
     private boolean intersectionAsOfTableAlias;
 
@@ -153,7 +153,7 @@ class SqlTreeNodeBean implements SqlTreeNode {
             return children[0].getSingleAttributeScalarType();
         }
         if (properties[0] instanceof STreePropertyAssocOne) {
-            STreePropertyAssocOne assocOne = (STreePropertyAssocOne) properties[0];
+      STreePropertyAssocOne assocOne = (STreePropertyAssocOne)properties[0];
             if (assocOne.isAssocId()) {
                 return assocOne.getIdScalarType();
             }
@@ -590,8 +590,8 @@ class SqlTreeNodeBean implements SqlTreeNode {
     }
 
     /**
-     * Join to base table for this node. This includes a join to the
-     * intersection table if this is a ManyToMany node.
+   * Join to base table for this node. This includes a join to the intersection
+   * table if this is a ManyToMany node.
      */
     public SqlJoinType appendFromBaseTable(DbSqlContext ctx, SqlJoinType joinType) {
 

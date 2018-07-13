@@ -36,14 +36,12 @@ public class AnnotationAssocOnes extends AnnotationParser {
 
   private static final Logger log = LoggerFactory.getLogger(AnnotationAssocOnes.class);
 
-  private final BeanDescriptorManager factory;
 
   /**
    * Create with the deploy Info.
    */
   AnnotationAssocOnes(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig, BeanDescriptorManager factory) {
-    super(info, readConfig);
-    this.factory = factory;
+    super(info, readConfig, factory);
   }
 
   /**

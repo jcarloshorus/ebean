@@ -12,6 +12,7 @@ import java.lang.annotation.Annotation;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * Builds the InheritInfo deployment information.
@@ -114,6 +115,11 @@ public class DeployInherit {
         if (ia != null) {
             info.setInheritanceType(ia.strategy());
         }
+        PrimaryKeyJoinColumn pk = AnnotationUtil.findAnnotationRecursive(cls, PrimaryKeyJoinColumn.class);
+        if(pk != null){
+            info.setPrimaryKeyJoinColumn(pk);
+        }
+        
         DiscriminatorColumn da = AnnotationUtil.findAnnotationRecursive(cls, DiscriminatorColumn.class);
         if (da != null) {
             // lowercase the discriminator column for RawSql and JSON

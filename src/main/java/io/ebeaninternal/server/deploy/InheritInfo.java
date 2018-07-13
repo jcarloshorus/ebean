@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * Represents a node in the Inheritance tree. Holds information regarding Super
@@ -52,10 +53,12 @@ public class InheritInfo {
 
     private final InheritInfo root;
 
-    private InheritanceType inheritanceType;
+    private final InheritanceType inheritanceType;
+    
+    private final PrimaryKeyJoinColumn primaryKeyJoinColumn;
 
     private BeanDescriptor<?> descriptor;
-
+    
     public InheritInfo(InheritInfo r, InheritInfo parent, DeployInheritInfo deploy) {
 
         this.parent = parent;
@@ -63,10 +66,14 @@ public class InheritInfo {
         this.discriminatorColumn = InternString.intern(deploy.getColumnName(parent));
         this.discriminatorValue = deploy.getDiscriminatorObjectValue();
         this.discriminatorStringValue = deploy.getDiscriminatorStringValue();
-
+        
         this.discriminatorType = deploy.getDiscriminatorType(parent);
         this.discriminatorLength = deploy.getColumnLength(parent);
         this.columnDefn = deploy.getColumnDefn();
+        
+        this.inheritanceType = deploy.getInheritanceType();
+        this.primaryKeyJoinColumn = deploy.getPrimaryKeyJoinColumn();
+        
         if (inheritanceType == InheritanceType.SINGLE_TABLE) {
             this.where = InternString.intern(deploy.getWhere());
         } else {
@@ -117,8 +124,8 @@ public class InheritInfo {
     }
 
     /**
-     * return true if anything in the inheritance hierarchy has a relationship
-     * with a save cascade on it.
+   * return true if anything in the inheritance hierarchy has a relationship with a save cascade on
+   * it.
      */
     public boolean isSaveRecurseSkippable() {
         return root.isNodeSaveRecurseSkippable();
@@ -137,8 +144,8 @@ public class InheritInfo {
     }
 
     /**
-     * return true if anything in the inheritance hierarchy has a relationship
-     * with a delete cascade on it.
+   * return true if anything in the inheritance hierarchy has a relationship with a delete cascade
+   * on it.
      */
     public boolean isDeleteRecurseSkippable() {
         return root.isNodeDeleteRecurseSkippable();
@@ -299,8 +306,7 @@ public class InheritInfo {
     }
 
     /**
-     * Return true if this is considered a concrete type in the inheritance
-     * hierarchy.
+   * Return true if this is considered a concrete type in the inheritance hierarchy.
      */
     public boolean isConcrete() {
         return !Modifier.isAbstract(type.getModifiers());
@@ -395,10 +401,10 @@ public class InheritInfo {
     }
 
     /**
-     * @param inheritanceType the inheritanceType to set
+     * @return the primaryKeyJoinColumn
      */
-    public void setInheritanceType(InheritanceType inheritanceType) {
-        this.inheritanceType = inheritanceType;
+    public PrimaryKeyJoinColumn getPrimaryKeyJoinColumn() {
+        return primaryKeyJoinColumn;
     }
 
 }

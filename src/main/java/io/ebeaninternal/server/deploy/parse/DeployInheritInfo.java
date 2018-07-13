@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * Represents a node in the Inheritance tree.
@@ -23,6 +24,7 @@ public class DeployInheritInfo {
   private String discriminatorStringValue;
   private Object discriminatorObjectValue;
   private InheritanceType inheritanceType;
+  private PrimaryKeyJoinColumn primaryKeyJoinColumn;
 
   private int columnType;
   private String columnName;
@@ -265,6 +267,20 @@ public class DeployInheritInfo {
      */
     public void setInheritanceType(InheritanceType inheritanceType) {
         this.inheritanceType = inheritanceType;
+    }
+
+    /**
+     * @return the primaryKeyJoinColumn
+     */
+    public PrimaryKeyJoinColumn getPrimaryKeyJoinColumn() {
+        return primaryKeyJoinColumn;
+    }
+
+    /**
+     * @param primaryKeyJoinColumn the primaryKeyJoinColumn to set
+     */
+    public void setPrimaryKeyJoinColumn(PrimaryKeyJoinColumn primaryKeyJoinColumn) {
+        this.primaryKeyJoinColumn = primaryKeyJoinColumn;
     }
 
 }

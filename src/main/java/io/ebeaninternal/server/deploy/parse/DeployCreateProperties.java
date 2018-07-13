@@ -78,8 +78,8 @@ public class DeployCreateProperties {
     }
 
     /**
-     * properties the bean properties from Class. Some of these properties may
-     * not map to database columns.
+   * properties the bean properties from Class. Some of these properties may not map to database
+   * columns.
      */
     private void createProperties(DeployBeanDescriptor<?> desc, Class<?> beanType, int level) {
 
@@ -175,8 +175,7 @@ public class DeployCreateProperties {
     }
 
     /**
-     * Find a public non-static getter method that matches this field (according
-     * to bean-spec rules).
+   * Find a public non-static getter method that matches this field (according to bean-spec rules).
      */
     private Method findGetter(Field field, String initFieldName, Method[] declaredMethods, boolean scalaObject) {
 
@@ -306,8 +305,8 @@ public class DeployCreateProperties {
     }
 
     /**
-     * Determine the type of the List,Set or Map. Not been set explicitly so
-     * determine this from ParameterizedType.
+   * Determine the type of the List,Set or Map. Not been set explicitly so determine this from
+   * ParameterizedType.
      */
     private Class<?> determineTargetType(Field field) {
 

@@ -44,14 +44,11 @@ import java.util.Set;
  */
 class AnnotationAssocManys extends AnnotationParser {
 
-  private final BeanDescriptorManager factory;
-
   /**
    * Create with the DeployInfo.
    */
   AnnotationAssocManys(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig, BeanDescriptorManager factory) {
-    super(info, readConfig);
-    this.factory = factory;
+    super(info, readConfig, factory);
   }
 
   /**

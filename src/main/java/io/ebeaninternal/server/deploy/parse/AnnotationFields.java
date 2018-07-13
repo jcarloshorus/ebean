@@ -38,6 +38,7 @@ import io.ebean.config.dbplatform.DbEncrypt;
 import io.ebean.config.dbplatform.DbEncryptFunction;
 import io.ebean.config.dbplatform.IdType;
 import io.ebean.config.dbplatform.PlatformIdGenerator;
+import io.ebeaninternal.server.deploy.BeanDescriptorManager;
 import io.ebeaninternal.server.deploy.DbMigrationInfo;
 import io.ebeaninternal.server.deploy.IndexDefinition;
 import io.ebeaninternal.server.deploy.generatedproperty.GeneratedPropertyFactory;
@@ -73,7 +74,6 @@ import javax.validation.constraints.Size;
 import java.sql.Types;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.Table;
 
 /**
  * Read the field level deployment annotations.
@@ -92,8 +92,8 @@ public class AnnotationFields extends AnnotationParser {
    */
   private FetchType defaultLobFetchType = FetchType.LAZY;
 
-  AnnotationFields(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig) {
-    super(info, readConfig);
+  AnnotationFields(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig, BeanDescriptorManager factory) {
+    super(info, readConfig, factory);
     this.jacksonAnnotationsPresent = readConfig.isJacksonAnnotations();
     this.generatedPropFactory = readConfig.getGeneratedPropFactory();
     if (readConfig.isEagerFetchLobs()) {

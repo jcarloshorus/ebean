@@ -1,6 +1,9 @@
 package io.ebeaninternal.server.deploy.parse;
 
 import io.ebeaninternal.server.deploy.BeanCascadeInfo;
+import io.ebeaninternal.server.deploy.BeanDescriptor;
+import io.ebeaninternal.server.deploy.BeanDescriptorManager;
+import io.ebeaninternal.server.deploy.BeanTable;
 import io.ebeaninternal.server.deploy.TableJoin;
 import io.ebeaninternal.server.deploy.meta.DeployBeanDescriptor;
 import io.ebeaninternal.server.deploy.meta.DeployBeanProperty;
@@ -16,6 +19,8 @@ import javax.validation.groups.Default;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -33,13 +38,16 @@ public abstract class AnnotationParser extends AnnotationBase {
 
     protected final ReadAnnotationConfig readConfig;
 
-    public AnnotationParser(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig) {
+    protected final BeanDescriptorManager factory;
+
+    public AnnotationParser(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig, BeanDescriptorManager factory) {
         super(info.getUtil());
         this.readConfig = readConfig;
         this.validationAnnotations = readConfig.isJavaxValidationAnnotations();
         this.info = info;
         this.beanType = info.getDescriptor().getBeanType();
         this.descriptor = info.getDescriptor();
+        this.factory = factory;
     }
 
     /**
@@ -85,7 +93,7 @@ public abstract class AnnotationParser extends AnnotationBase {
         if (cascadeTypes != null && cascadeTypes.length > 0) {
             cascadeInfo.setTypes(cascadeTypes);
         }
-    }
+    } 
 
     /**
      * Read an AttributeOverrides if they exist for this embedded bean.
@@ -129,18 +137,42 @@ public abstract class AnnotationParser extends AnnotationBase {
             // its on a secondary table...
             prop.setSecondaryTable(tableName);
         }
-        if (prop.isInherited()) {
-            Table tbl = prop.getOwningType().getAnnotation(Table.class);
-            DeployTableJoin join = new DeployTableJoin();
-            join.setInheritInfo(descriptor.getInheritInfo());
-            
-//            join.addJoinColumn(new DeployTableJoinColumn("BQDIDDES", "BI3IDDES"));
-            join.addJoinColumn(new DeployTableJoinColumn("XXXX", "YYY"));
-            join.setTable(tbl.name());
-            descriptor.addTableJoin(join);
-            prop.setInheritanceTableJoin(join, "prefix");
+//        if (prop.getOwningType() != prop.getDesc().getBeanType()) {
+////            BeanTable baseBeanTable = factory.getBeanTable(info.getDescriptor().getBeanType());
+//
+////            String localPrimaryKey = baseBeanTable.getIdColumn();
+////            TableJoin join = descriptor.getPrimaryKeyJoin();
+////            String foreignColumn =  localPrimaryKey.get factory.getBeanTable beanTable(prop).getIdColumn();
+//
+////            prop.getTableJoin().addJoinColumn(new DeployTableJoinColumn(localPrimaryKey, foreignColumn, false, false));
+//
+//            prop.setInheritanceTable(prop.getOwningType().getAnnotation(Table.class).name());
+//            Table tbl = prop.getOwningType().getAnnotation(Table.class);
+//            PrimaryKeyJoinColumn pk = descriptor.getInheritInfo().getPrimaryKeyJoinColumn();
+//            Class classe = prop.getOwningType();
+//            BeanDescriptor desc2 =  factory.getBeanDescriptor(classe);
+//            System.out.println(factory.getBeanDescriptorList());
+//            System.out.println(factory.getBeanManager(classe));
+//            System.out.println(factory.getBeanTable(classe));
+//            System.out.println(factory.getDeploy(classe));
+//            
+//            System.out.println(descriptor.getIdClassProperty());
+//            System.out.println(descriptor.getIdType());
+//            Id id2 = prop.getOwningType().getAnnotation(Id.class);
+//            System.out.println(id2);
+//            System.out.println(id2);
+////            String col =  id.getDbColumn();
+////            
+//            DeployTableJoin join = new DeployTableJoin();
+//            join.setInheritInfo(descriptor.getInheritInfo());
+//            
+////            join.addJoinColumn(new DeployTableJoinColumn("BQDIDDES", "BI3IDDES"));
+//            join.addJoinColumn(new DeployTableJoinColumn("XXXX", "YYY"));
+//            join.setTable(tbl.name());
+//            descriptor.addTableJoin(join);
+//            prop.setInheritanceTableJoin(join, "prefix");
 
-        }
+//        }
     }
 
     /**

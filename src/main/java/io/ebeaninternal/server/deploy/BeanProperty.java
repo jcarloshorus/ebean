@@ -270,11 +270,14 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
 
     final String softDeleteDbPredicate;
 
+    private DeployBeanProperty deploy;
+
     public BeanProperty(DeployBeanProperty deploy) {
         this(null, deploy);
     }
 
     public BeanProperty(BeanDescriptor<?> descriptor, DeployBeanProperty deploy) {
+        this.deploy = deploy;
 
         this.descriptor = descriptor;
         this.name = InternString.intern(deploy.getName());
@@ -319,13 +322,6 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
         this.owningType = deploy.getOwningType();
         this.local = deploy.isLocal();
         this.inherited = !this.local;
-    if(this.inherited){
-        this.inheritanceTableJoin = new TableJoin(deploy.getInheritanceTableJoin());
-        this.inheritanceTableJoinPrefix = deploy.getInheritanceTableJoinPrefix();
-    }else {
-         this.inheritanceTableJoin = null;
-         this.inheritanceTableJoinPrefix = null;
-    }
 
         this.version = deploy.isVersionColumn();
         this.embedded = deploy.isEmbedded();
@@ -388,7 +384,7 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
      * </p>
      */
     public BeanProperty(BeanProperty source, BeanPropertyOverride override) {
-
+        this.deploy = deploy;
         this.descriptor = source.descriptor;
         this.name = InternString.intern(source.getName());
         this.propertyIndex = source.propertyIndex;
@@ -470,6 +466,14 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
         // do nothing for normal BeanProperty
         if (!isTransient && scalarType == null) {
             throw new RuntimeException("No ScalarType assigned to " + descriptor.getFullName() + "." + getName());
+        }
+        //Para evitar erros que ocorriam no constructor, pois o deploy ainda não estava pronto
+        if (deploy.getInheritanceTableJoin() !=null) {
+            this.inheritanceTableJoin = new TableJoin(deploy.getInheritanceTableJoin());
+            this.inheritanceTableJoinPrefix = deploy.getInheritanceTableJoinPrefix();
+        } else {
+            this.inheritanceTableJoin = null;
+            this.inheritanceTableJoinPrefix = null;
         }
     }
 
@@ -578,7 +582,7 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
 
             String relativePrefix = ctx.getRelativePrefix(secondaryTableJoinPrefix);
             secondaryTableJoin.addJoin(joinType, relativePrefix, ctx);
-        } else if(inheritanceTableJoin != null){
+        } else if (inheritanceTableJoin != null) {
             String relativePrefix = ctx.getRelativePrefix(inheritanceTableJoinPrefix);
             inheritanceTableJoin.addJoin(joinType, relativePrefix, ctx);
         }
@@ -1139,6 +1143,7 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
 
     /**
      * Return true if this is a generated property mapping to @WhenCreated or
+     *
      * @CreatedTimestamp.
      */
     public boolean isGeneratedWhenCreated() {
@@ -1147,6 +1152,7 @@ public class BeanProperty implements ElPropertyValue, Property, STreeProperty {
 
     /**
      * Return true if this is a generated property mapping to @WhenModified or
+     *
      * @UpdatedTimestamp.
      */
     public boolean isGeneratedWhenModified() {

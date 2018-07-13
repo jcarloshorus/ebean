@@ -86,6 +86,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * Creates BeanDescriptors.
@@ -215,7 +216,7 @@ public class BeanDescriptorManager implements BeanDescriptorMap {
 
         this.asOfViewSuffix = getAsOfViewSuffix(databasePlatform, serverConfig);
         String versionsBetweenSuffix = getVersionsBetweenSuffix(databasePlatform, serverConfig);
-        this.readAnnotations = new ReadAnnotations(config.getGeneratedPropertyFactory(), asOfViewSuffix, versionsBetweenSuffix, serverConfig);
+        this.readAnnotations = new ReadAnnotations(config.getGeneratedPropertyFactory(), asOfViewSuffix, versionsBetweenSuffix, serverConfig, this);
         this.bootupClasses = config.getBootupClasses();
         this.createProperties = config.getDeployCreateProperties();
         this.namingConvention = serverConfig.getNamingConvention();
@@ -848,6 +849,27 @@ public class BeanDescriptorManager implements BeanDescriptorMap {
                 }
             }
         }
+
+        DeployBeanDescriptor<?> descriptor = info.getDescriptor();
+        for (DeployBeanProperty prop : info.getDescriptor().propertiesAll()) {
+            if (prop.isInherited()) {
+                PrimaryKeyJoinColumn pkj = prop.getDesc().getInheritInfo().getPrimaryKeyJoinColumn();
+                BeanTable baseBeanTable = getBeanTable(prop.getOwningType());
+
+                String  foreignColumn = baseBeanTable.getIdColumn();
+                String  localPrimaryKey= pkj.name();
+
+                DeployTableJoinColumn dtjc = new DeployTableJoinColumn(localPrimaryKey, foreignColumn, false, false);
+
+                DeployTableJoin join = new DeployTableJoin();
+                join.setInheritInfo(descriptor.getInheritInfo());
+
+                join.addJoinColumn(dtjc);
+                join.setTable(baseBeanTable.getBaseTable());
+                descriptor.addTableJoin(join);
+                prop.setInheritanceTableJoin(join, "prefix");
+            }
+        }
     }
 
     private void secondaryPropsJoins(DeployBeanInfo<?> info) {
@@ -866,7 +888,7 @@ public class BeanDescriptorManager implements BeanDescriptorMap {
                 DeployTableJoin tableJoin = assocOne.getTableJoin();
                 prop.setSecondaryTableJoin(tableJoin, assocOne.getName());
             }
-            
+
         }
     }
 

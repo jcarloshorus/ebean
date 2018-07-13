@@ -11,9 +11,11 @@ import io.ebeaninternal.server.deploy.generatedproperty.GeneratedPropertyFactory
 public class ReadAnnotations {
 
   private final ReadAnnotationConfig readConfig;
+  private final BeanDescriptorManager factory;
 
-  public ReadAnnotations(GeneratedPropertyFactory generatedPropFactory, String asOfViewSuffix, String versionsBetweenSuffix, ServerConfig serverConfig) {
+  public ReadAnnotations(GeneratedPropertyFactory generatedPropFactory, String asOfViewSuffix, String versionsBetweenSuffix, ServerConfig serverConfig, BeanDescriptorManager factory) {
     this.readConfig = new ReadAnnotationConfig(generatedPropFactory, asOfViewSuffix, versionsBetweenSuffix, serverConfig);
+    this.factory = factory;
   }
 
   /**
@@ -25,8 +27,8 @@ public class ReadAnnotations {
    */
   public void readInitial(DeployBeanInfo<?> info) {
     try {
-      new AnnotationClass(info, readConfig).parse();
-      new AnnotationFields(info, readConfig).parse();
+      new AnnotationClass(info, readConfig, factory).parse();
+      new AnnotationFields(info, readConfig, factory).parse();
     } catch (RuntimeException e) {
       throw new RuntimeException("Error reading annotations for " + info, e);
     }
@@ -51,9 +53,9 @@ public class ReadAnnotations {
 
       // read the Sql annotations last because they may be
       // dependent on field level annotations
-      new AnnotationSql(info, readConfig).parse();
+      new AnnotationSql(info, readConfig, factory).parse();
 
-      new AnnotationClass(info, readConfig).parseAttributeOverride();
+      new AnnotationClass(info, readConfig, factory).parseAttributeOverride();
       info.getDescriptor().postAnnotations();
 
     } catch (RuntimeException e) {

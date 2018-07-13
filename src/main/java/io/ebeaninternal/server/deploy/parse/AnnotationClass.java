@@ -14,6 +14,7 @@ import io.ebean.annotation.View;
 import io.ebean.config.TableName;
 import io.ebean.util.AnnotationUtil;
 import io.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
+import io.ebeaninternal.server.deploy.BeanDescriptorManager;
 import io.ebeaninternal.server.deploy.IndexDefinition;
 import io.ebeaninternal.server.deploy.InheritInfo;
 import io.ebeaninternal.server.deploy.meta.DeployBeanProperty;
@@ -48,8 +49,8 @@ public class AnnotationClass extends AnnotationParser {
    * Create to parse AttributeOverride annotations which is run last
    * after all the properties/fields have been parsed fully.
    */
-  public AnnotationClass(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig) {
-    super(info, readConfig);
+  public AnnotationClass(DeployBeanInfo<?> info, ReadAnnotationConfig readConfig, BeanDescriptorManager factory) {
+    super(info, readConfig, factory);
     this.asOfViewSuffix = readConfig.getAsOfViewSuffix();
     this.versionsBetweenSuffix = readConfig.getVersionsBetweenSuffix();
     this.disableL2Cache = readConfig.isDisableL2Cache();
